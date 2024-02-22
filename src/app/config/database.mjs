@@ -9,6 +9,7 @@ const config = {
   server: process.env.SQL_HOST,
   database: process.env.SQL_DATABASE,
   options: {
+    port: parseInt(process.env.SQL_PORT,10),
     encrypt: false,
     trustServerCertificate: true,
   },
