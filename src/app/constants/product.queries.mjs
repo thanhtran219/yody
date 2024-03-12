@@ -1,4 +1,4 @@
-export const queries = {
+export const productQueries = {
   getCategoryList: `WITH CategoryCTE AS (
                         SELECT
                             CategoryID,
@@ -92,5 +92,37 @@ export const queries = {
                                   ,[ProductLine]
                             FROM [YODY_V2].[dbo].[PRODUCT]
                             WHERE ParentCategoryID = @parentCategoryId`,
+  getProductsList: `SELECT
+                    p.ProductID,
+                    ProductName,
+                    ProductCode,
+                    SellingPrice,
+                    DiscountRate,
+                    JSON_QUERY((
+                        SELECT
+                            pc.ProductColorID,
+                            c.ColorID,
+                            JSON_QUERY((
+                                        SELECT
+                                            pimg.ImageID,
+                                            pimg.URL
+                                        FROM
+                                            PRODUCT_IMAGE pimg
+                                        WHERE
+                                            pimg.ProductColorID = pc.ProductColorID
+                                        FOR JSON PATH
+                                    )) AS Images
+                        FROM PRODUCT_COLOR pc
+                            JOIN COLOR c ON pc.ColorID = c.ColorID
+                        WHERE p.ProductID = pc.ProductID
+                        FOR JSON PATH
+                    )) AS Children
+                    FROM CATEGORY c
+                    LEFT JOIN PRODUCT p ON c.CategoryID = p.CategoryID
+                    LEFT JOIN PRODUCT_COLOR pc ON p.ProductID = pc.ProductID
+                    LEFT JOIN COLOR co ON pc.ColorID = co.ColorID
+                    LEFT JOIN DISCOUNT d ON p.DiscountID = d.DiscountID 
+                    WHERE p.ProductID IS NOT NULL AND pc.ProductColorID IS NOT NULL
+                    GROUP BY p.ProductID, ProductName, ProductCode, SellingPrice, DiscountRate;`
 
 };

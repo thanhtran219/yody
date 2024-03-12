@@ -1,8 +1,8 @@
-import productModel from "../models/product.model.mjs";
+import productService from "../services/product.service.mjs";
 
 const getAllCategory = async (req, res, next) => {
   try {
-    const results = await productModel.getAllCategory(req);
+    const results = await productService.getAllCategory(req);
     res.send({ results });
   } catch (error) {
     console.error("Error executing query:", error.message);
@@ -12,7 +12,7 @@ const getAllCategory = async (req, res, next) => {
 
 const getAll = async (req, res, next) => {
   try {
-    const products = await productModel.getAllProducts(req);
+    const products = await productService.getAllProducts(req);
     res.send({ products });
   } catch (error) {
     console.error("Error executing query:", error.message);
@@ -23,7 +23,7 @@ const getAll = async (req, res, next) => {
 const getByProductId = async (req, res, next) => {
   try {
     const productId = req.params.id;
-    const product = await productModel.getProductById(req, productId);
+    const product = await productService.getProductById(req, productId);
     if (product) {
       res.send({ product });
     } else {
@@ -37,7 +37,7 @@ const getByProductId = async (req, res, next) => {
 
 // const getAoThunNu = async (req, res, next) => {
 //   try {
-//     const products = await productModel.getProductByCategoryId(req, 29);
+//     const products = await productService.getProductByCategoryId(req, 29);
 //     res.send({ products });
 //   } catch (error) {
 //     console.error("Error executing query:", error.message);
@@ -47,7 +47,7 @@ const getByProductId = async (req, res, next) => {
 
 // const getPoloNam = async (req, res, next) => {
 //   try {
-//     const products = await productModel.getProductByCategoryId(req, 34);
+//     const products = await productService.getProductByCategoryId(req, 34);
 //     res.send({ products });
 //   } catch (error) {
 //     console.error("Error executing query:", error.message);
@@ -58,7 +58,7 @@ const getByProductId = async (req, res, next) => {
 const getProductsByCategoryId = (categoryId) => {
   return async (req, res, next) => {
     try {
-      const products = await productModel.getProductByCategoryId(req, categoryId);
+      const products = await productService.getProductByCategoryId(req, categoryId);
       res.send({ products });
     } catch (error) {
       console.error("Error executing query:", error.message);
@@ -70,7 +70,7 @@ const getProductsByCategoryId = (categoryId) => {
 const getProductsByParentCategoryId = (parenCategoryId) => {
   return async (req, res, next) => {
     try {
-      const products = await productModel.getProductsByParentCategoryId(req, parenCategoryId);
+      const products = await productService.getProductsByParentCategoryId(req, parenCategoryId);
       res.send({ products });
     } catch (error) {
       console.error("Error executing query:", error.message);
